@@ -7,7 +7,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Book Reviews</a>
+        <a class="navbar-brand" href="#">Tenant Management System</a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
@@ -17,8 +17,8 @@
         </ul>
         <ul class="nav navbar-nav pull-right">
             {% if session.logged_in %}
-              <li><a href="#">Dashboard</a></li>
-              <li><a href="#">Logout</a></li>
+              <li><a href="{{url_for('dashboard')}}">Dashboard</a></li>
+              <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
               <li><a href="{{url_for('register')}}">Create Account</a></li>
               <li><a href="{{url_for('login')}}">Login</a></li>
