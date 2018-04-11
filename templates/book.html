@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+{% block body %}
+        <h1>Book {{book['id']}}</h1>
+        <small>Written by {{book.author}} in {{book.year}}</small><br>
+        <small>ISBN Number {{book.isbn}}</small>
+        <hr>
+        <p>
+            {{book.title}}
+        </p>
+        <h1>Past Reviews</h1>
+        {% for review in reviews %}
+            <p>Author: {{review['author']}}</p>
+            <p>Date: {{review['create_date']}}</p>
+            <p>Rating: {{review['rating']}}</p>
+            <div>Description: {{review['description'] | safe }}</div>
+            <hr>
+        {% endfor %}
+        <h1>Add Reviews</h1>
+        <form action="" method="POST">
+            <div class="form-group">
+                <label>Rating</label>
+                <select name="rating" class="form-control">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Your Review</label>
+                <textarea name="review" class="form-control" cols="30" rows="10"></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form> 
+        <hr>               
+{% endblock %}
