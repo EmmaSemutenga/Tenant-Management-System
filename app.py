@@ -37,7 +37,7 @@ class RegisterForm(Form):
 @app.route("/register", methods=["POST", "GET"])
 def register():
     form = RegisterForm(request.form)
-    if request.method == "POST":
+    if request.method == "POST" and form.validate():
         #get form values
         name = form.name.data
         email = form.email.data
