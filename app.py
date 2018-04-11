@@ -23,6 +23,10 @@ engine = create_engine('postgresql://postgres:emz@localhost:5432/rentals')
 #engine = create_engine("postgres://ejamgpdjfseyvb:95b220c4f0313c2a1f73784f5a7ac8d8411fe32b58bcc622fb15a46e826be33f@ec2-184-73-250-50.compute-1.amazonaws.com:5432/d4cbchhtnf8tmb")
 db = scoped_session(sessionmaker(bind=engine))
 
+#index page
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 class RegisterForm(Form):
     name     = StringField('Name', [validators.Length(min=1, max=50)])

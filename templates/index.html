@@ -1,12 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <img src="images/{{url_for()}}" alt="">
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block body %}
+    <div class="container">
+        <header class="text-center">
+            <div>
+                <img src="{{url_for('static',filename='img/rental-markets.jpg')}}" alt="" >
+            </div>
+            <div>
+                <h1>Welcome to the
+                    <em>Rental menagement System</em>
+                </h1>
+            </div>
+        </header>
+
+
+    </div>
+
+{% endblock %}
