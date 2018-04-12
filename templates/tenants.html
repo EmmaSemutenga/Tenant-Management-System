@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<h1> All Tenants</h1>
+
+<!--<input type="text" placeholder="Search.."><button type="submit" value="submit">Search</button>-->
+
+
+<form class="example" action="/single_tenant">
+    <input type="text" placeholder="Search.." name="search">
+    <button type="submit"><i class="fa fa-search"></i></button>
+  </form>
+<br>
+
+<table class="table table-striped table-responsive table-condensed  table-bordered table-hover"> 
+<tr>
+        <th>NAMES</th>
+        <th>CONTACT</th>
+        <th>EMAIL</th>
+        <th>OCCUPATION</th>
+        <th>PREVIOUS RESIDENCE</th>
+        <th>JOIN DATE</th>
+        <th>HOUSE NUMBER</th>
+        <th>IMAGE</th>
+    
+
+    <tr>
+
+  {% for i in tenants  %}
+
+          <td>{{i.first_name}} {{i.last_name}}</td>
+          <td>{{i.contact}}</td>
+          <td>{{i.email}}</td>
+          <td>{{i.occupation}}</td>
+          <td>{{i.previous_residence}}</td>
+          <td>{{i.join_date}}</td>
+          <td>{{i.house_id}}</td>
+          <td>{{i.image}}</td>
+      </tr>
+  
+ 
+
+  {% endfor %}
+</table>
+{% endblock %}

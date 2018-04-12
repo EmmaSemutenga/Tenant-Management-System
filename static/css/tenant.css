@@ -1,0 +1,23 @@
+
+
+h1{
+    color: dodgerblue !important;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+th {
+    height: 50px;
+    text-align: left;
+    vertical-align: bottom;
+}
+td{
+    vertical-align: bottom !important;
+}
+

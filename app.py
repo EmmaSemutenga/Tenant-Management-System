@@ -10,7 +10,12 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
 
+#imported a data file
+from tenants import Tenants
+
 app = Flask(__name__)
+
+Tenants = Tenants()
 
 
 # Configure session to use filesystem
@@ -112,3 +117,15 @@ def logout():
 @is_logged_in
 def dashboard():
     return render_template("dashboard.html")
+
+#tenants route
+@app.route('/tenants', methods = ['GET', 'POST'])
+def tenants():
+    
+    return render_template('tenants.html', tenants=Tenants) 
+
+#tenants route
+@app.route('/single_tenant/<string:id>')
+def single_tenant():
+    return render_template('single_tenant.html')    
+
