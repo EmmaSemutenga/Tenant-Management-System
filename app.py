@@ -23,6 +23,17 @@ engine = create_engine('postgresql://postgres:emz@localhost:5432/rentals')
 #engine = create_engine("postgres://ejamgpdjfseyvb:95b220c4f0313c2a1f73784f5a7ac8d8411fe32b58bcc622fb15a46e826be33f@ec2-184-73-250-50.compute-1.amazonaws.com:5432/d4cbchhtnf8tmb")
 db = scoped_session(sessionmaker(bind=engine))
 
+#check if user logged in
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized, Please login', 'danger')
+            return redirect(url_for('login'))
+    return wrap
+
 #index page
 @app.route('/')
 def index():
@@ -39,6 +50,7 @@ class RegisterForm(Form):
     confirm = PasswordField('Confirm Password')
 
 @app.route("/register", methods=["POST", "GET"])
+@is_logged_in
 def register():
     form = RegisterForm(request.form)
     if request.method == "POST" and form.validate():
@@ -89,16 +101,6 @@ def login():
 
     return render_template("login.html")
 
-#check if user logged in
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash('Unauthorized, Please login', 'danger')
-            return redirect(url_for('login'))
-    return wrap
 
 @app.route('/logout')
 @is_logged_in
