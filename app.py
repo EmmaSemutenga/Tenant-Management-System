@@ -6,7 +6,7 @@ from flask import Flask, session, render_template, url_for, flash, logging, redi
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField
 from passlib.hash import sha256_crypt
 from functools import wraps
 
@@ -24,7 +24,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Set up database
-engine = create_engine('postgresql://postgres:emz@localhost:5432/rentals')
+engine = create_engine('postgresql://postgres:justine@localhost:5432/Rental')
 #engine = create_engine("postgres://ejamgpdjfseyvb:95b220c4f0313c2a1f73784f5a7ac8d8411fe32b58bcc622fb15a46e826be33f@ec2-184-73-250-50.compute-1.amazonaws.com:5432/d4cbchhtnf8tmb")
 db = scoped_session(sessionmaker(bind=engine))
 
@@ -34,7 +34,7 @@ def index():
     return render_template('index.html')
 
 class RegisterForm(Form):
-    name     = StringField('Name', [validators.Length(min=1, max=50)])
+    name     = StringField('name', [validators.Length(min=1, max=50)])
     username     = StringField('Username', [validators.Length(min=4, max=25)])
     email        = StringField('Email Address', [validators.Length(min=6, max=50)])
     password = PasswordField('Password', [
@@ -59,8 +59,6 @@ def register():
         flash('You are now registered and can login', 'success')
         
         return redirect(url_for('login'))
-
-
     return render_template('register.html', form = form)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -118,14 +116,79 @@ def logout():
 def dashboard():
     return render_template("dashboard.html")
 
+
+
+
+class RegisterTenantForm(Form):
+    first_name = StringField('Name',[validators.Length(min=1, max=50)])  
+    last_name = StringField('Username',[validators.Length(min=4, max=25)])
+    email = StringField('Email',[validators.Length(min=7, max=50)])  
+    image= StringField('Image_name')
+    contact = StringField('Contact', [validators.Length(min=10, max=12)])
+    house_id = StringField('house_id')
+    occupation = TextAreaField('occupation',[validators.Length(min=5)])
+    previous_residence = TextAreaField('Previous_residence')
+    join_date = StringField('Join_date')
+
+
+
+@app.route('/register_tenants', methods=['GET', 'POST'])
+def register_tenants():
+    form = RegisterTenantForm(request.form)
+    if request.method == 'POST' and form.validate():
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        email = form.email.data
+        image = form.image.data
+        contact = form.contact.data
+        house_id = form.house_id.data
+        occupation = form.occupation.data
+        previous_residence = form.previous_residence.data
+        join_date = form.join_date.data
+      
+
+        #Execute
+        db.execute("INSERT INTO tenants(first_name, last_name, email, image, contact, house_id, occupation, previous_residence) VALUES(:first_name, :last_name, :email, :image, :contact, :house_id, :occupation, :previous_residence)", 
+        {"first_name":first_name, "last_name":last_name, "email":email, "image":image, "contact":contact, "house_id":house_id, "occupation":occupation, "previous_residence":previous_residence , "join_date":join_date})
+
+        #commiting to db
+        db.commit()
+
+        flash('Successfully registered a tenant', 'success')
+
+        return redirect(url_for('dashboard'))
+
+    return render_template('register_tenants.html', form=form)
+
+
+
+
+
+
+
+
+
+
 #tenants route
-@app.route('/tenants', methods = ['GET', 'POST'])
+'''@app.route('/tenants', methods = ['GET', 'POST'])
 def tenants():
     
-    return render_template('tenants.html', tenants=Tenants) 
+    #Execute
+    result = db.execute("INSERT INTO tenants(first_name, last_name, email, image, contact, house_id, occupation, previous_residence, join_date)
+     VALUES(:first_name, :last_name, :email, :image, :contact, :house_id, :occupation, :previous_residence, join_date )", 
+     (first_name, last_name, email, image, contact, house_id, occupation, previous_residence, join_date))
+
+    #commiting to db
+    db.commit()
+
+
+    
+    
+    return render_template('register_tenants.html', tenants=Tenants) 
 
 #tenants route
 @app.route('/single_tenant/<string:id>')
 def single_tenant():
-    return render_template('single_tenant.html')    
+    return render_template('single_tenant.html')    '''
+
 
