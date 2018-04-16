@@ -148,7 +148,7 @@ def register_tenants():
       
 
         #Execute
-        db.execute("INSERT INTO tenants(first_name, last_name, email, image, contact, house_id, occupation, previous_residence) VALUES(:first_name, :last_name, :email, :image, :contact, :house_id, :occupation, :previous_residence)", 
+        db.execute("INSERT INTO tenants(first_name, last_name, email, image, contact, house_id, occupation, previous_residence, join_date) VALUES(:first_name, :last_name, :email, :image, :contact, :house_id, :occupation, :previous_residence)", 
         {"first_name":first_name, "last_name":last_name, "email":email, "image":image, "contact":contact, "house_id":house_id, "occupation":occupation, "previous_residence":previous_residence , "join_date":join_date})
 
         #commiting to db
@@ -165,9 +165,11 @@ def register_tenants():
 
 
 
-
-
-
+#Tenants
+@app.route('/tenants')
+def Tenants():
+ tenants =  db.execute("SELECT * FROM tenants").fetchall()
+ return render_template('tenants.html', tenants=tenants)
 
 #tenants route
 '''@app.route('/tenants', methods = ['GET', 'POST'])
