@@ -1,22 +1,33 @@
 import csv
 import os
-import requests
+import requests #used with apis
 
 from flask import Flask, session, render_template, url_for, flash, logging, redirect, request
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired
+from werkzeug.utils import secure_filename
+from wtforms import StringField, TextAreaField, PasswordField, validators, IntegerField, BooleanField
 from passlib.hash import sha256_crypt
 from functools import wraps
 
 app = Flask(__name__)
 
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/img')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+app.config["SECRET_KEY"] = "jfjfjfkdkdncdkdcd"
 
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+
+
 
 # Set up database
 engine = create_engine('postgresql://postgres:emz@localhost:5432/rentals')
@@ -34,12 +45,8 @@ def is_logged_in(f):
             return redirect(url_for('login'))
     return wrap
 
-#index page
-@app.route('/')
-def index():
-    return render_template('index.html')
 
-class RegisterForm(Form):
+class RegisterForm(FlaskForm):
     name     = StringField('Name', [validators.Length(min=1, max=50)])
     username     = StringField('Username', [validators.Length(min=4, max=25)])
     email        = StringField('Email Address', [validators.Length(min=6, max=50)])
@@ -52,8 +59,11 @@ class RegisterForm(Form):
 @app.route("/register", methods=["POST", "GET"])
 @is_logged_in
 def register():
-    form = RegisterForm(request.form)
-    if request.method == "POST" and form.validate():
+    #form = RegisterForm(request.form)
+    form = RegisterForm()
+    #if request.method == "POST" and form.validate():
+    if form.validate_on_submit():#checks for post requests and also that the form is valid
+
         #get form values
         name = form.name.data
         email = form.email.data
@@ -70,7 +80,7 @@ def register():
 
     return render_template('register.html', form = form)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
         #get form fields
@@ -114,3 +124,57 @@ def logout():
 @is_logged_in
 def dashboard():
     return render_template("dashboard.html")
+
+class HouseForm(FlaskForm):
+    house_no     = StringField('House Number', [validators.Length(min=1, max=50)])
+    type_of_house    = StringField('Type of House', [validators.Length(min=1, max=25)])
+    location    = StringField('Location', [validators.Length(min=1, max=25)])
+    rent_amount    = IntegerField('Rent Amount')
+    status        = BooleanField('Status')
+    #image    = StringField('Image', [validators.Length(min=1, max=25)])
+    image = FileField("House Photo", validators=[FileRequired()])
+
+@app.route('/add_house', methods=['GET','POST'])
+@is_logged_in
+def add_house():
+    #form = HouseForm(request.form)
+    form = HouseForm()
+    #if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
+        #get form values
+        house_no     = form.house_no.data
+        type_of_house    = form.type_of_house.data
+        location    = form.location.data
+        rent_amount    = form.rent_amount.data
+        status = form.status.data
+        #image = form.image.data
+        f = form.image.data
+        imagename = secure_filename(f.filename)#image name
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], imagename))
+
+
+        db.execute("INSERT INTO houses (house_no, type_of_house, location, rent_amount, status, image) VALUES (:house_no, :type_of_house, :location, :rent_amount, :status, :image)",{"house_no":house_no, "type_of_house":type_of_house, "location":location, "rent_amount":rent_amount, "status":status, "image":imagename})
+        db.commit()
+        
+        flash('House has been registered', 'success')
+        
+        return redirect(url_for('dashboard'))
+
+
+    return render_template('add_house.html', form = form)
+
+@app.route('/houses')
+@is_logged_in
+def houses():
+    result = db.execute("SELECT * FROM houses").fetchall()
+    if len(result) > 0:
+        return render_template("houses.html", houses = result)
+    else:
+        flash('No Houses found', 'danger')
+        return render_template('dashboard.html', houses = result)
+
+@app.route('/house/<int:house_id>')
+def house(house_id):
+    result = db.execute("SELECT * FROM houses where id=:house_id", {'house_id':house_id}).fetchone()
+
+    return render_template('house.html', house = result)

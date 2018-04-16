@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+     
+        <h1>Dashboard <small>Welcome user ID {{session.username}}</small> </h1>
+        <table class="table table-bordered">
+          <tr>
+            <th>HOUSE NO</th> 
+            <th>TYPE OF HOUSE</th> 
+            <th>LOCATION</th>
+            <th>RENT AMOUNT</th>
+            <th>STATUS</th>
+          </tr>
+          {% for house in houses %}
+          <tr>
+            <td><a href="{{url_for('house', house_id=house.id)}}">{{house.house_no}}</a></td>
+            <td>{{house.type_of_house}}</td>
+            <td>{{house.location}}</td>
+            <td>{{house.rent_amount}}</td>
+            <td>{{house.status}}</td>
+          </tr>
+          {% endfor %}
+        
+        </table>
+      
+{% endblock %}

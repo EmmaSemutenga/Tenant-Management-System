@@ -7,18 +7,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{url_for('index')}}">Rental Management System</a>
+        <a class="navbar-brand" href="{{url_for('login')}}">Rental Management System</a>
 
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li><a href="{{url_for('index')}}">Home</a></li>
+          <li><a href="{{url_for('login')}}">Home</a></li>
          
-          <li><a href="#">Houses</a></li>
+          <li><a href="{{url_for('houses')}}">Houses</a></li>
         </ul>
         <ul class="nav navbar-nav pull-right">
             {% if session.logged_in %}
-              <li><a href="#">Create House</a></li>
+              <li><a href="#">Admins</a></li>
+              <li><a href="{{url_for('add_house')}}">Create House</a></li>
               <li><a href="{{url_for('register')}}">Create Account</a></li>
               <li><a href="{{url_for('dashboard')}}">Dashboard</a></li>
               <li><a href="{{url_for('logout')}}">Logout</a></li>

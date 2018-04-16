@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="row">
+        <div class="col-md-4">
+                        <h1>House Number: {{house['house_no']}}</h1>
+                        <p>Type Of House: {{house.type_of_house}}</p>
+                        <p>Location: {{house.location}}</p>
+                        <p>Rent Amount: {{house.rent_amount}}</p>
+                        <p>Available: {{house.status}}</p>
+                        <p>Image name: {{house.image}}</p>
+        </div>
+        <div class="col-md-8">
+                        <img src="{{url_for('static', filename='img/')}}{{house.image}}" class="img img-thumbnail img-responsive">
+        </div>
+</div>
+        
+                            
+{% endblock %}

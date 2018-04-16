@@ -15,7 +15,7 @@ As the owner:
 
 Database: Rental
 Table: Owners; id(serial), name(varchar), username(varchar), password(varchar)
-Table: Houses; id(serial), house_no(varchar), type_of_house(varchar), location(varchar), rent_amount(integer), status(interger)(availability)
+Table: Houses; id(serial), house_no(varchar), type_of_house(varchar), location(varchar), rent_amount(integer), status()(boolean), image(varchar)
 Table: Tenants; id(serial), first_name(varchar), last_name(varchar), image(varchar), contact(varchar), house_id(integer), occupation(varchar), previous_residence(varchar), join_date(timestamp), email(varchar)
 Table: Next_of_Kins; id(serial), first_name(varchar), last_name(varchar), contact(varchar), tenant_id(integer)
 Table: Payments; id(serial), month(varchar), date_paid(timestamp), tenant_id(integer), amount(integer), balance(integer)  
