@@ -7,6 +7,8 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired
 from passlib.hash import sha256_crypt
 from functools import wraps
 
@@ -27,6 +29,12 @@ Session(app)
 engine = create_engine('postgresql://postgres:justine@localhost:5432/Rental')
 #engine = create_engine("postgres://ejamgpdjfseyvb:95b220c4f0313c2a1f73784f5a7ac8d8411fe32b58bcc622fb15a46e826be33f@ec2-184-73-250-50.compute-1.amazonaws.com:5432/d4cbchhtnf8tmb")
 db = scoped_session(sessionmaker(bind=engine))
+
+
+
+
+
+
 
 #index page
 @app.route('/')
@@ -133,6 +141,7 @@ class RegisterTenantForm(Form):
 
 
 @app.route('/register_tenants', methods=['GET', 'POST'])
+@is_logged_in
 def register_tenants():
     form = RegisterTenantForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -148,8 +157,8 @@ def register_tenants():
       
 
         #Execute
-        db.execute("INSERT INTO tenants(first_name, last_name, email, image, contact, house_id, occupation, previous_residence, join_date) VALUES(:first_name, :last_name, :email, :image, :contact, :house_id, :occupation, :previous_residence)", 
-        {"first_name":first_name, "last_name":last_name, "email":email, "image":image, "contact":contact, "house_id":house_id, "occupation":occupation, "previous_residence":previous_residence , "join_date":join_date})
+        db.execute("INSERT INTO tenants(first_name, last_name, email, contact, occupation, previous_residence) VALUES(:first_name, :last_name, :email,  :contact,  :occupation, :previous_residence)", 
+        {"first_name":first_name, "last_name":last_name, "email":email,  "contact":contact,  "occupation":occupation, "previous_residence":previous_residence})
 
         #commiting to db
         db.commit()

@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
 {% block body %}
 
-<h1> All Tenants</h1>
+<h1 id="tenants"> All Tenants</h1>
 
 <!--<input type="text" placeholder="Search.."><button type="submit" value="submit">Search</button>-->
-
+<a href="/register_tenants" class=" btn btn-success btn-lg  pull-right">Add Tenant</a><br>
 
 <form class="example" action="/single_tenant">
     <input type="text" placeholder="Search.." name="search">
@@ -17,25 +17,21 @@
         <th>NAMES</th>
         <th>CONTACT</th>
         <th>EMAIL</th>
-        <th>OCCUPATION</th>
-        <th>PREVIOUS RESIDENCE</th>
         <th>JOIN DATE</th>
         <th>HOUSE NUMBER</th>
-        <th>IMAGE</th>
+        
     
 
     <tr>
 
   {% for i in tenants  %}
 
-          <td>{{i.first_name}} {{i.last_name}}</td>
+          <td>{{i.last_name}} {{i.first_name}}</td>
           <td>{{i.contact}}</td>
           <td>{{i.email}}</td>
-          <td>{{i.occupation}}</td>
-          <td>{{i.previous_residence}}</td>
           <td>{{i.join_date}}</td>
           <td>{{i.house_id}}</td>
-          <td>{{i.image}}</td>
+      
       </tr>
   
  

@@ -19,6 +19,8 @@
         <ul class="nav navbar-nav pull-right">
             {% if session.logged_in %}
               <li><a href="{{url_for('dashboard')}}">Dashboard</a></li>
+
+              <li><a href="{{url_for('Tenants')}}">Tenants</a></li>
             
               <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
