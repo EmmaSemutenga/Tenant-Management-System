@@ -30,7 +30,7 @@ Session(app)
 
 
 # Set up database
-engine = create_engine('postgresql://postgres:emz@localhost:5432/rentals')
+engine = create_engine('postgresql://postgres:12345@localhost:5432/rentals')
 #engine = create_engine("postgres://ejamgpdjfseyvb:95b220c4f0313c2a1f73784f5a7ac8d8411fe32b58bcc622fb15a46e826be33f@ec2-184-73-250-50.compute-1.amazonaws.com:5432/d4cbchhtnf8tmb")
 db = scoped_session(sessionmaker(bind=engine))
 
@@ -72,9 +72,9 @@ def register():
 
         db.execute("INSERT INTO owners (name, username, email, password) VALUES (:name, :username, :email, :password)",{"name": name, "username": username, "email": email, "password":password})
         db.commit()
-        
+
         flash('You are now registered and can login', 'success')
-        
+
         return redirect(url_for('login'))
 
 
@@ -92,17 +92,17 @@ def login():
         result = db.execute("SELECT * FROM owners WHERE username = :username", {"username": username}).fetchone()
 
         if len(result) > 0:
-            
+
             password = result['password']
 
             #compare passwords
             if sha256_crypt.verify(password_candidate, password) :
-                
+
                 session['logged_in']= True
                 session['username'] = result['username']
                 flash('You are now logged in', 'success')
                 return redirect(url_for('dashboard'))
-            else: 
+            else:
                 flash('Password not matched', 'danger')
                 return render_template('login.html')
         else:
@@ -155,9 +155,9 @@ def add_house():
 
         db.execute("INSERT INTO houses (house_no, type_of_house, location, rent_amount, status, image) VALUES (:house_no, :type_of_house, :location, :rent_amount, :status, :image)",{"house_no":house_no, "type_of_house":type_of_house, "location":location, "rent_amount":rent_amount, "status":status, "image":imagename})
         db.commit()
-        
+
         flash('House has been registered', 'success')
-        
+
         return redirect(url_for('dashboard'))
 
 
