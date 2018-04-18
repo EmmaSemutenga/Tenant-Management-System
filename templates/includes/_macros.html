@@ -7,4 +7,30 @@
 <li>
     <a href="{{ url_for(endpoint) }}">{{text}}</a>
 </li>
-{% endif %} {% endmacro %}
+{% endif %}
+{% endmacro %}
+
+<!--for the input-->
+{% macro input(field,name, value='', type='text', size='', class='') -%}
+{% if field=='': %}
+{% else: %}
+{{field.label}}
+{% endif %}
+<input type="{{ type }}" name="{{ name }}" value="{{value|e }}" size="{{ size }}" class="{{class}}">
+{%- endmacro %}
+
+<!--for the textarea-->
+{%- macro textarea(field,name, value='', rows=10, cols=40) -%}
+{{ field.label }} <br>
+<textarea name="{{ name }}" rows="{{ rows }}" cols="{{ cols }}">{{ value|e }}</textarea>
+{%- endmacro %}
+
+{% macro render_field(field) %}
+{{ field.label }}
+{{ field(**kwargs)|safe}}
+{% if field.errors %}
+{% for error in field.errors%}
+<span class="help-inline">{{ error }}</span>
+{% endfor %}
+{% endif %}
+{% endmacro %}

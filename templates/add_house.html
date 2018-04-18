@@ -1,29 +1,42 @@
 {% extends 'layout.html' %}
 {% block body %}
-    
+
         <h1>Add House</h1>
-        {% from "includes/_formhelpers.html" import render_field %}
+        {% import 'includes/_macros.html' as forms %}
+
         <form action="{{url_for('add_house')}}" method="POST" enctype="multipart/form-data">
             {{ form.csrf_token }}
             <div class="form-group">
-                {{render_field(form.house_no, class_="form-control")}}
+                {{forms.render_field(form.house_no, class_="form-control")}}
             </div>
             <div class="form-group">
-                {{render_field(form.type_of_house, class_="form-control")}}
+                {{forms.render_field(form.type_of_house, class_="form-control")}}
             </div>
             <div class="form-group">
-                {{render_field(form.location, class_="form-control")}}
+                {{forms.render_field(form.location, class_="form-control")}}
             </div>
             <div class="form-group">
-                {{render_field(form.rent_amount, class_="form-control")}}
+                {{forms.render_field(form.rent_amount, class_="form-control")}}
             </div>
             <div class="form-group">
-                {{render_field(form.status, class_="form-control")}}
+                <p>House status</p>
+                {{forms.input('','status', type='radio', value='occupied')}}<label for="">occupied</label>
+                {{forms.input('','status', type='radio', value='empty')}}<label for="">Empty</label>
             </div>
-            <div class="form-group">
-                {{render_field(form.image, class_="form-control")}}
+
+            <div class="form-group" >
+                <div class="col-md-8">
+                    {{forms.textarea(form.description,'House Description', cols=70)}}
+                </div>
+                <div class="col-md-4">
+                    {{forms.render_field(form.image)}}
+                </div>
             </div>
-            <p><input type="submit" value="Submit" class="btn btn-primary"></p>
+            <div class="col-md-12">
+                <p>{{forms.input('','submit',value='Submit', type='submit', class='btn btn-primary')}}</p>
+            </div>
+
+
         </form>
-        
+
 {% endblock %}
