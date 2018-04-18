@@ -12,19 +12,20 @@
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li><a href="{{url_for('login')}}">Home</a></li>
-         
-          <li><a href="{{url_for('houses')}}">Houses</a></li>
+          {{nav_link('login','Home')}}
+          {{nav_link('houses','Houses')}}
+
         </ul>
         <ul class="nav navbar-nav pull-right">
             {% if session.logged_in %}
               <li><a href="#">Admins</a></li>
-              <li><a href="{{url_for('add_house')}}">Create House</a></li>
-              <li><a href="{{url_for('register')}}">Create Account</a></li>
-              <li><a href="{{url_for('dashboard')}}">Dashboard</a></li>
-              <li><a href="{{url_for('logout')}}">Logout</a></li>
+
+               {{nav_link('add_house','Create House')}}
+               {{nav_link('register','Create Account')}}
+               {{nav_link('dashboard','Dashboard')}}
+               {{nav_link('logout','Logout')}}
             {% else %}
-              <li><a href="{{url_for('login')}}">Login</a></li>
+               {{nav_link('login','Login')}}
             {% endif %}
         </ul>
       </div><!--/.nav-collapse -->
